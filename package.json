@@ -32,6 +32,7 @@
     "troika-three-text": "^0.45.0"
   },
   "devDependencies": {
+    "@types/hubs": "github:MozillaReality/hubs-ts-types",
     "@types/node": "^18.15.0",
     "@types/react": "^18.2.57",
     "@types/three": "^0.141.0",
