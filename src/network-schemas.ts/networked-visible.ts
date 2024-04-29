@@ -1,35 +1,35 @@
 import {
   EntityID,
-  MigrationFn,
-  NetworkSchema,
   StoredComponent,
   defineNetworkSchema,
+  NetworkSchema,
   deserializerWithMigrations,
-  read,
+  MigrationFn,
   write,
+  read,
 } from "hubs";
-import { NetworkedTemplateComponent } from "./components";
+import { NetworkedVisible } from "../components";
 
-const migrations = new Map<EntityID, MigrationFn>();
+const migrations = new Map<number, MigrationFn>();
 
 function apply(eid: EntityID, { version, data }: StoredComponent) {
   if (version !== 1) return false;
 
-  const { color }: { color: number } = data;
-  write(NetworkedTemplateComponent.color, eid, color);
+  const { visible }: { visible: boolean } = data;
+  write(NetworkedVisible.visible, eid, visible);
   return true;
 }
 
-const runtimeSerde = defineNetworkSchema(NetworkedTemplateComponent);
-export const NetworkedTemplateSchema: NetworkSchema = {
-  componentName: "networked-template",
+const runtimeSerde = defineNetworkSchema(NetworkedVisible);
+export const NetworkedVisibleSchema: NetworkSchema = {
+  componentName: "networked-visible",
   serialize: runtimeSerde.serialize,
   deserialize: runtimeSerde.deserialize,
   serializeForStorage: function serializeForStorage(eid: EntityID) {
     return {
       version: 1,
       data: {
-        color: read(NetworkedTemplateComponent.color, eid),
+        visible: read(NetworkedVisible.visible, eid),
       },
     };
   },

@@ -1,16 +1,21 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "es6",
-        "jsx": "react",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist",
-        "sourceMap": true,
-        "moduleResolution": "node"
-    },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules"]
-  }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "jsx": "react",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@types/hubs"
+    ],
+    "allowJs": true
+  },
+  "include": ["./src/**/*.ts", "./src/components.js"],
+  "exclude": ["node_modules", "dist"]
+}

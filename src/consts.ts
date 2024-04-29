@@ -1,1 +1,1 @@
-export const ADDON_ID = "hubs-template-addon";
+export const ADDON_ID = "hubs-behavior-graphs-addon";
