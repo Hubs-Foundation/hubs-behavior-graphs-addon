@@ -42,7 +42,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@oveddan-behave-graph/core": "^0.11.1",
-    "help": "^3.0.2"
+    "@oveddan-behave-graph/core": "^0.11.1"
   }
 }

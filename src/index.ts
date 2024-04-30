@@ -23,7 +23,6 @@ import { inflateNetworkedBehavior } from "./inflators/networked-behavior";
 import { inflateNetworkedMaterial } from "./inflators/networked-material";
 import { inflateNetworkedObjectMaterial } from "./inflators/networked-object-material";
 import { inflateNetworkedObjectProperties } from "./inflators/networked-object-properties";
-import { inflateNetworkedTransform } from "./inflators/networked-transform";
 import { inflateVisible } from "./inflators/visible";
 import {
   NetworkedAnimationAction,
@@ -38,7 +37,7 @@ import { NetworkedMaterialSchema } from "./network-schemas.ts/networked-material
 import { NetworkedObject3DMaterialSchema } from "./network-schemas.ts/networked-object-material";
 import { NetworkedVisibleSchema } from "./network-schemas.ts/networked-visible";
 import { physicsSystem } from "./systems/physics-system";
-import { actionsSection } from "./ecsSideBarSections";
+import { actionsSection, networkedMaterialSection } from "./ecsSideBarSections";
 import { removeSystem } from "./systems/remove-system";
 
 function onReady(app: App, config?: JSON) {
@@ -52,6 +51,7 @@ function onReady(app: App, config?: JSON) {
   );
   registerGLTFLinkResolver(resolveBG);
   registerECSSidebarSection(actionsSection);
+  registerECSSidebarSection(networkedMaterialSection);
 }
 
 registerAddon(ADDON_ID, {
@@ -124,9 +124,6 @@ registerAddon(ADDON_ID, {
         id: "networkedObjectProperties",
         inflator: inflateNetworkedObjectProperties,
       },
-    },
-    {
-      gltf: { id: "networkedTransform", inflator: inflateNetworkedTransform },
     },
     {
       gltf: { id: "visible", inflator: inflateVisible },

@@ -1,6 +1,12 @@
-import { App, ComponentDataT, EntityID, HubsWorld } from "hubs";
+import {
+  ComponentDataT,
+  EntityID,
+  HubsWorld,
+  Networked,
+  NetworkedTransform,
+} from "hubs";
 import { inflateVisible } from "./visible";
-import { inflateNetworkedTransform } from "./networked-transform";
+import { addComponent } from "bitecs";
 
 export interface NetworkedObjectPropertiesParams {
   visible: boolean;
@@ -19,7 +25,8 @@ export function inflateNetworkedObjectProperties(
 ): number {
   params = Object.assign({}, DEFAULTS, params);
   if (params.transform) {
-    inflateNetworkedTransform(world, eid);
+    addComponent(world, Networked, eid);
+    addComponent(world, NetworkedTransform, eid);
   }
   if (params.visible) {
     inflateVisible(world, eid, params);
