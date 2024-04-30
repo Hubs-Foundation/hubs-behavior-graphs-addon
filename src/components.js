@@ -40,7 +40,6 @@ export const NetworkedAnimation = defineComponent();
 export const NetworkedBehavior = defineComponent({
   timestamp: Types.ui32,
 });
-export const InteractableObject = defineComponent();
 export const Visible = defineComponent({
   visible: Types.ui8,
 });
