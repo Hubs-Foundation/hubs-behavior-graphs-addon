@@ -37,7 +37,7 @@ import { NetworkedMaterialSchema } from "./network-schemas.ts/networked-material
 import { NetworkedObject3DMaterialSchema } from "./network-schemas.ts/networked-object-material";
 import { NetworkedVisibleSchema } from "./network-schemas.ts/networked-visible";
 import { physicsSystem } from "./systems/physics-system";
-import { actionsSection, networkedMaterialSection } from "./ecsSideBarSections";
+import { actionsSection } from "./ecsSideBarSections";
 import { removeSystem } from "./systems/remove-system";
 
 function onReady(app: App, config?: JSON) {
@@ -51,7 +51,6 @@ function onReady(app: App, config?: JSON) {
   );
   registerGLTFLinkResolver(resolveBG);
   registerECSSidebarSection(actionsSection);
-  registerECSSidebarSection(networkedMaterialSection);
 }
 
 registerAddon(ADDON_ID, {
@@ -61,43 +60,43 @@ registerAddon(ADDON_ID, {
   system: [
     {
       system: customTagsSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: physicsSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: visibilitySystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: materialSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: objectMaterialSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: playersSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: animationSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: mediaSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: behaviorGraphSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
     {
       system: removeSystem,
-      order: SystemOrderE.MatricesUpdate,
+      order: SystemOrderE.BeforeMatricesUpdate,
     },
   ],
   inflator: [

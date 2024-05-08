@@ -1,5 +1,5 @@
 import { addComponent } from "bitecs";
-import { EntityID, HubsWorld, Networked } from "hubs";
+import { EntityID, HubsWorld } from "hubs";
 import { NetworkedMaterial } from "../components";
 
 export const MaterialFlags = {
@@ -15,7 +15,6 @@ export function inflateNetworkedMaterial(
   world: HubsWorld,
   eid: EntityID
 ): EntityID {
-  addComponent(world, Networked, eid);
   addComponent(world, NetworkedMaterial, eid);
 
   return eid;

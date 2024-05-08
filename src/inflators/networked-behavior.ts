@@ -1,5 +1,5 @@
 import { addComponent } from "bitecs";
-import { ComponentDataT, EntityID, HubsWorld, Networked } from "hubs";
+import { ComponentDataT, EntityID, HubsWorld } from "hubs";
 import { NetworkedBehavior } from "../components";
 
 export const NetworkedBehaviorData = new Map<EntityID, Map<string, JSON>>();
@@ -9,7 +9,6 @@ export function inflateNetworkedBehavior(
   eid: EntityID,
   params?: ComponentDataT
 ): EntityID {
-  addComponent(world, Networked, eid);
   addComponent(world, NetworkedBehavior, eid);
   if (params) {
     const data = NetworkedBehaviorData.get(eid) || new Map();

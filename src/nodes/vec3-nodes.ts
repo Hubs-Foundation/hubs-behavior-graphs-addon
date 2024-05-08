@@ -7,10 +7,11 @@ export const Vector3Value = {
   vec3: new ValueType(
     "vec3",
     () => new Vector3(),
-    (value: Vector3 | Vec3JSON) => (value instanceof Vector3 ? value : new Vector3(value.x, value.y, value.z)),
+    (value: Vector3 | Vec3JSON) =>
+      value instanceof Vector3 ? value : new Vector3(value.x, value.y, value.z),
     (value: Vector3) => ({ x: value.x, y: value.y, z: value.z }),
     (start: Vector3, end: Vector3, t: number) => start.lerp(end, t)
-  )
+  ),
 };
 
 export const Vector3Nodes = definitionListToMap([
@@ -22,7 +23,7 @@ export const Vector3Nodes = definitionListToMap([
     out: [{ v: "vec3" }],
     exec: (x: number, y: number, z: number) => {
       return { v: new Vector3(x, y, z) };
-    }
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/vec3/separate",
@@ -32,7 +33,7 @@ export const Vector3Nodes = definitionListToMap([
     out: [{ x: "float" }, { y: "float" }, { z: "float" }],
     exec: (v: Vector3) => {
       return { x: v.x, y: v.y, z: v.z };
-    }
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/vec3",
@@ -40,7 +41,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: "vec3",
-    exec: (a: Vector3) => a
+    exec: (a: Vector3) => a,
   }),
   makeInNOutFunctionDesc({
     name: "math/vec3/applyEuler",
@@ -48,7 +49,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "euler"],
     out: "vec3",
-    exec: (a: Vector3, b: Euler) => a.clone().applyEuler(b)
+    exec: (a: Vector3, b: Euler) => a.clone().applyEuler(b),
   }),
   makeInNOutFunctionDesc({
     name: "math/toVec3/float",
@@ -56,7 +57,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Float Math" as any,
     in: [{ x: "float" }, { y: "float" }, { z: "float" }],
     out: "vec3",
-    exec: (x: number, y: number, z: number) => new Vector3(x, y, z)
+    exec: (x: number, y: number, z: number) => new Vector3(x, y, z),
   }),
   makeInNOutFunctionDesc({
     name: "math/toFloat/vec3",
@@ -64,7 +65,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: [{ x: "float" }, { y: "float" }, { z: "float" }],
-    exec: (v: Vector3) => ({ x: v.x, y: v.y, z: v.z })
+    exec: (v: Vector3) => ({ x: v.x, y: v.y, z: v.z }),
   }),
   makeInNOutFunctionDesc({
     name: "math/toString/vec3",
@@ -72,7 +73,8 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: "string",
-    exec: (v: Vector3) => `${v.x.toFixed(4)}, ${v.y.toFixed(4)}, ${v.z.toFixed(4)}`
+    exec: (v: Vector3) =>
+      `${v.x.toFixed(4)}, ${v.y.toFixed(4)}, ${v.z.toFixed(4)}`,
   }),
   makeInNOutFunctionDesc({
     name: "math/add/vec3",
@@ -80,7 +82,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "vec3"],
     out: "vec3",
-    exec: (a: Vector3, b: Vector3) => new Vector3().addVectors(a, b)
+    exec: (a: Vector3, b: Vector3) => new Vector3().addVectors(a, b),
   }),
   makeInNOutFunctionDesc({
     name: "math/subtract/vec3",
@@ -88,7 +90,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "vec3"],
     out: "vec3",
-    exec: (a: Vector3, b: Vector3) => new Vector3().subVectors(a, b)
+    exec: (a: Vector3, b: Vector3) => new Vector3().subVectors(a, b),
   }),
   makeInNOutFunctionDesc({
     name: "math/negate/vec3",
@@ -96,7 +98,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: "vec3",
-    exec: (a: Vector3) => new Vector3().copy(a).negate()
+    exec: (a: Vector3) => new Vector3().copy(a).negate(),
   }),
   makeInNOutFunctionDesc({
     name: "math/scale/vec3",
@@ -104,7 +106,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "float"],
     out: "vec3",
-    exec: (a: Vector3, b: number) => new Vector3().copy(a).multiplyScalar(b)
+    exec: (a: Vector3, b: number) => new Vector3().copy(a).multiplyScalar(b),
   }),
   makeInNOutFunctionDesc({
     name: "math/length/vec3",
@@ -112,7 +114,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: "float",
-    exec: (a: Vector3) => new Vector3().copy(a).length()
+    exec: (a: Vector3) => new Vector3().copy(a).length(),
   }),
   makeInNOutFunctionDesc({
     name: "math/normalize/vec3",
@@ -120,7 +122,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: "vec3",
-    exec: (a: Vector3) => new Vector3().copy(a).normalize()
+    exec: (a: Vector3) => new Vector3().copy(a).normalize(),
   }),
   makeInNOutFunctionDesc({
     name: "math/cross/vec3",
@@ -128,7 +130,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "vec3"],
     out: "vec3",
-    exec: (a: Vector3, b: Vector3) => new Vector3().crossVectors(a, b)
+    exec: (a: Vector3, b: Vector3) => new Vector3().crossVectors(a, b),
   }),
   makeInNOutFunctionDesc({
     name: "math/dot/vec3",
@@ -136,7 +138,7 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3", "vec3"],
     out: "float",
-    exec: (a: Vector3, b: Vector3) => new Vector3().copy(a).dot(b)
+    exec: (a: Vector3, b: Vector3) => new Vector3().copy(a).dot(b),
   }),
   makeInNOutFunctionDesc({
     name: "math/mix/vec3",
@@ -144,7 +146,8 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: [{ a: "vec3" }, { b: "vec3" }, { t: "float" }],
     out: "vec3",
-    exec: (a: Vector3, b: Vector3, t: number) => new Vector3().lerpVectors(a, b, t)
+    exec: (a: Vector3, b: Vector3, t: number) =>
+      new Vector3().lerpVectors(a, b, t),
   }),
   makeInNOutFunctionDesc({
     name: "math/equal/vec3",
@@ -152,6 +155,6 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: [{ a: "vec3" }, { b: "vec3" }, { tolerance: "float" }],
     out: "boolean",
-    exec: (a: Vector3, b: Vector3) => a.equals(b)
-  })
+    exec: (a: Vector3, b: Vector3) => a.equals(b),
+  }),
 ]);
