@@ -9,7 +9,7 @@ import {
 } from "hubs";
 import { GLTFParser } from "three/examples/jsm/loaders/GLTFLoader";
 import { GLTFMozBehaviorExtension, resolveBG } from "./gltf-plugin";
-import { behaviorGraphSystem } from "./systems/behavior-graphs";
+import { behaviorGraphSystem, initEngine } from "./systems/behavior-graphs";
 import { visibilitySystem } from "./systems/visibility-system";
 import { materialSystem } from "./systems/material-system";
 import { objectMaterialSystem } from "./systems/object-material-system";
@@ -41,7 +41,6 @@ import { actionsSection } from "./ecsSideBarSections";
 import { removeSystem } from "./systems/remove-system";
 
 function onReady(app: App, config?: JSON) {
-  console.log("Template add-on ready", JSON.stringify(config));
   // TODO remove and use MOZ_behavior until spec is finalized
   registerGLTFLoaderPlugin(
     (parser: GLTFParser) => new GLTFMozBehaviorExtension("KHR_behavior")
@@ -51,6 +50,8 @@ function onReady(app: App, config?: JSON) {
   );
   registerGLTFLinkResolver(resolveBG);
   registerECSSidebarSection(actionsSection);
+
+  initEngine(app, config);
 }
 
 registerAddon(ADDON_ID, {

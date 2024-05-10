@@ -39,7 +39,7 @@ export const playerEmitters = {
   onPlayerLeft: new EventEmitter<ClientID>(),
 };
 
-export const playerNodedefs = definitionListToMap([
+export const PlayerNodes = definitionListToMap([
   makeInNOutFunctionDesc({
     name: "hubs/player/getLocalPlayer",
     label: "Get Local Player",

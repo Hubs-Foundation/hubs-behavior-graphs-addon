@@ -7,7 +7,6 @@ import {
   IRegistry,
   Logger,
   makeCoreDependencies,
-  makeFlowNodeDefinition,
   ManualLifecycleEventEmitter,
   readGraphFromJSON,
   validateGraph,
@@ -24,9 +23,10 @@ import { MaterialNodes } from "../nodes/material-nodes";
 import { MediaNodes } from "../nodes/media-nodes";
 import { NetworkingNodes } from "../nodes/networking-nodes";
 import { PhysicsNodes } from "../nodes/physics-nodes";
-import { playerNodedefs, playerValueDefs } from "../nodes/player-nodes";
+import { PlayerNodes, playerValueDefs } from "../nodes/player-nodes";
 import { TimerNodes } from "../nodes/time-nodes";
-import { definitionListToMap, cleanupNodespac } from "../nodes/utils";
+import { MiscNodes } from "../nodes/misc-nodes";
+import { cleanupNodespac } from "../nodes/utils";
 import {
   EntityNodes,
   EntityValue as entityValueDefs,
@@ -36,76 +36,68 @@ import {
   Vector3Value as vec3ValueDefs,
 } from "../nodes/vec3-nodes";
 
-const coreValues = getCoreValueTypes();
-const logger = new DefaultLogger();
-const registry: IRegistry = {
-  nodes: {
-    ...getCoreNodeDefinitions(coreValues),
-    ...EntityNodes,
-    ...Vector3Nodes,
-    ...EulerNodes,
-    ...AnimationNodes,
-    ...NetworkingNodes,
-    ...playerNodedefs,
-    ...MediaNodes,
-    ...ElementNodes,
-    ...PhysicsNodes,
-    ...MaterialNodes,
-    ...TimerNodes,
-    ...definitionListToMap([
-      makeFlowNodeDefinition({
-        typeName: "hubs/displayMessage",
-        category: "Misc" as any,
-        label: "Display Notification Message",
-        in: { flow: "flow", text: "string" },
-        out: { flow: "flow" },
-        initialState: undefined,
-        triggered: ({ read, commit }) => {
-          APP.messageDispatch?.receive({
-            type: "script_message",
-            msg: read<string>("text"),
-          });
-          commit("flow");
-        },
-      }),
-    ]),
-  },
-  values: {
-    ...coreValues,
-    ...vec3ValueDefs,
-    ...entityValueDefs,
-    ...eulerValueDefs,
-    ...animationValueDefs,
-    ...playerValueDefs,
-  },
-};
-
-const easingNode = registry.nodes["math/easing"] as any;
-easingNode.in.easingMode.choices = easingNode.in.easingMode.options.map(
-  (v: any) => ({ text: v, value: v })
-);
-easingNode.in.easingFunction.choices = easingNode.in.easingFunction.options.map(
-  (v: any) => ({ text: v, value: v })
-);
-
-const orders = ["XYZ", "YXZ", "ZXY", "ZYX", "YZX", "XZY"].map((v) => ({
-  text: v,
-  value: v,
-}));
-const eulerCombineNode = registry.nodes["math/euler/combine"] as any;
-eulerCombineNode.in()[3].choices = orders;
-eulerCombineNode.in()[3].defaultValue = orders[0].value;
-
-const nodeSpec = cleanupNodespac(
-  writeNodeSpecsToJSON({ ...registry, dependencies: {} })
-);
-console.log("registry", registry, nodeSpec);
-console.log(JSON.stringify(nodeSpec, null, 2));
-
 type EngineState = {
   engine: Engine;
   lifecycleEmitter: ManualLifecycleEventEmitter;
 };
+
+export let gltf_yup = false;
+
+let registry: IRegistry | null = null;
+export function initEngine(app: App, config?: JSON) {
+  const coreValues = getCoreValueTypes();
+  registry = {
+    nodes: {
+      ...getCoreNodeDefinitions(coreValues),
+      ...EntityNodes,
+      ...Vector3Nodes,
+      ...EulerNodes,
+      ...AnimationNodes,
+      ...NetworkingNodes,
+      ...PlayerNodes,
+      ...MediaNodes,
+      ...ElementNodes,
+      ...PhysicsNodes,
+      ...MaterialNodes,
+      ...TimerNodes,
+      ...MiscNodes,
+    },
+    values: {
+      ...coreValues,
+      ...vec3ValueDefs,
+      ...entityValueDefs,
+      ...eulerValueDefs,
+      ...animationValueDefs,
+      ...playerValueDefs,
+    },
+  };
+
+  const easingNode = registry.nodes["math/easing"] as any;
+  easingNode.in.easingMode.choices = easingNode.in.easingMode.options.map(
+    (v: any) => ({ text: v, value: v })
+  );
+  easingNode.in.easingFunction.choices =
+    easingNode.in.easingFunction.options.map((v: any) => ({
+      text: v,
+      value: v,
+    }));
+
+  const orders = ["XYZ", "YXZ", "ZXY", "ZYX", "YZX", "XZY"].map((v) => ({
+    text: v,
+    value: v,
+  }));
+  const eulerCombineNode = registry.nodes["math/euler/combine"] as any;
+  eulerCombineNode.in()[3].choices = orders;
+  eulerCombineNode.in()[3].defaultValue = orders[0].value;
+
+  const nodeSpec = cleanupNodespac(
+    writeNodeSpecsToJSON({ ...registry, dependencies: {} })
+  );
+  console.log("registry", registry, nodeSpec);
+  console.log(JSON.stringify(nodeSpec, null, 2));
+}
+
+const logger = new DefaultLogger();
 
 export const engines = new Map<EntityID, EngineState>();
 const behaviorGraphsQuery = defineQuery([BehaviorGraph]);
@@ -115,6 +107,10 @@ const behaviorGraphExitQuery = exitQuery(behaviorGraphsQuery);
 export function behaviorGraphSystem(app: App) {
   const world = app.world;
   behaviorGraphEnterQuery(world).forEach(function (eid) {
+    if (!registry) {
+      throw new Error("Registry not initialized. Halting.");
+    }
+
     const obj = world.eid2obj.get(eid)!;
     const graphJson = obj.userData.behaviorGraph as GraphJSON;
 
@@ -135,6 +131,8 @@ export function behaviorGraphSystem(app: App) {
       values: registry.values,
       dependencies,
     });
+    graph.name = `Behavior Graph (${eid})`;
+
     graph.name = `Test ${eid}`;
 
     console.log("Loaded graph", graph);
