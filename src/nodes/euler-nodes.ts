@@ -1,6 +1,7 @@
 import { makeInNOutFunctionDesc, ValueType } from "@oveddan-behave-graph/core";
 import { Euler, Quaternion, Vector3 } from "three";
 import { definitionListToMap } from "./utils";
+import { gltf_yup } from "../systems/behavior-graphs";
 
 type EulerJSON = { x: number; y: number; z: number };
 const tmpQuat1 = new Quaternion();
@@ -9,11 +10,16 @@ export const eulerValueDefs = {
   euler: new ValueType(
     "euler",
     () => new Euler(),
-    (value: Euler | EulerJSON) => (value instanceof Euler ? value.clone() : new Euler(value.x, value.y, value.z)),
+    (value: Euler | EulerJSON) =>
+      value instanceof Euler
+        ? value.clone()
+        : new Euler(value.x, value.y, value.z),
     (value: Euler) => ({ x: value.x, y: value.y, z: value.z }),
     (start: Euler, end: Euler, t: number) =>
-      new Euler().setFromQuaternion(tmpQuat1.setFromEuler(start).slerp(tmpQuat2.setFromEuler(end), t))
-  )
+      new Euler().setFromQuaternion(
+        tmpQuat1.setFromEuler(start).slerp(tmpQuat2.setFromEuler(end), t)
+      )
+  ),
 };
 
 export const EulerNodes = definitionListToMap([
@@ -24,8 +30,10 @@ export const EulerNodes = definitionListToMap([
     in: [{ x: "float" }, { y: "float" }, { z: "float" }, { order: "string" }],
     out: [{ v: "euler" }],
     exec: (x: number, y: number, z: number, order: string) => {
-      return { v: new Euler(x, y, z, order) };
-    }
+      return {
+        v: gltf_yup ? new Euler(x, z, y, order) : new Euler(x, y, z, order),
+      };
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/euler/separate",
@@ -34,8 +42,10 @@ export const EulerNodes = definitionListToMap([
     in: [{ v: "euler" }],
     out: [{ x: "float" }, { y: "float" }, { z: "float" }, { order: "string" }],
     exec: (v: Euler) => {
-      return { x: v.x, y: v.y, z: v.z, order: v.order };
-    }
+      return gltf_yup
+        ? { x: v.x, y: v.z, z: v.y, order: v.order }
+        : { x: v.x, y: v.y, z: v.z, order: v.order };
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/euler/add",
@@ -49,7 +59,7 @@ export const EulerNodes = definitionListToMap([
       r.y += b.y;
       r.z += b.z;
       return r;
-    }
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/euler/subtract",
@@ -63,7 +73,7 @@ export const EulerNodes = definitionListToMap([
       r.y -= b.y;
       r.z -= b.z;
       return r;
-    }
+    },
   }),
   makeInNOutFunctionDesc({
     name: "math/euler/subtract",
@@ -77,6 +87,6 @@ export const EulerNodes = definitionListToMap([
       r.y *= b;
       r.z *= b;
       return r;
-    }
-  })
+    },
+  }),
 ]);

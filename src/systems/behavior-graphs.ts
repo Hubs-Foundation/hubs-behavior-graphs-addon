@@ -133,7 +133,7 @@ export function behaviorGraphSystem(app: App) {
     });
     graph.name = `Behavior Graph (${eid})`;
 
-    graph.name = `Test ${eid}`;
+    gltf_yup = !!graph.metadata["gltf_yup"];
 
     console.log("Loaded graph", graph);
     const registryErrors = validateRegistry(registry);

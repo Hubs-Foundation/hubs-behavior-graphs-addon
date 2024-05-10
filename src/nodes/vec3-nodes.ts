@@ -1,6 +1,7 @@
 import { makeInNOutFunctionDesc, ValueType } from "@oveddan-behave-graph/core";
 import { Euler, Vector3 } from "three";
 import { definitionListToMap } from "./utils";
+import { gltf_yup } from "../systems/behavior-graphs";
 
 type Vec3JSON = { x: number; y: number; z: number };
 export const Vector3Value = {
@@ -22,7 +23,7 @@ export const Vector3Nodes = definitionListToMap([
     in: [{ x: "float" }, { y: "float" }, { z: "float" }],
     out: [{ v: "vec3" }],
     exec: (x: number, y: number, z: number) => {
-      return { v: new Vector3(x, y, z) };
+      return { v: gltf_yup ? new Vector3(x, z, y) : new Vector3(x, y, z) };
     },
   }),
   makeInNOutFunctionDesc({
@@ -32,7 +33,7 @@ export const Vector3Nodes = definitionListToMap([
     in: [{ v: "vec3" }],
     out: [{ x: "float" }, { y: "float" }, { z: "float" }],
     exec: (v: Vector3) => {
-      return { x: v.x, y: v.y, z: v.z };
+      return gltf_yup ? { x: v.x, y: v.y, z: v.z } : { x: v.x, y: v.z, z: v.y };
     },
   }),
   makeInNOutFunctionDesc({
@@ -57,7 +58,8 @@ export const Vector3Nodes = definitionListToMap([
     category: "Float Math" as any,
     in: [{ x: "float" }, { y: "float" }, { z: "float" }],
     out: "vec3",
-    exec: (x: number, y: number, z: number) => new Vector3(x, y, z),
+    exec: (x: number, y: number, z: number) =>
+      gltf_yup ? new Vector3(x, z, y) : new Vector3(x, y, z),
   }),
   makeInNOutFunctionDesc({
     name: "math/toFloat/vec3",
@@ -65,7 +67,8 @@ export const Vector3Nodes = definitionListToMap([
     category: "Vec3 Math" as any,
     in: ["vec3"],
     out: [{ x: "float" }, { y: "float" }, { z: "float" }],
-    exec: (v: Vector3) => ({ x: v.x, y: v.y, z: v.z }),
+    exec: (v: Vector3) =>
+      gltf_yup ? { x: v.x, y: v.y, z: v.z } : { x: v.x, y: v.z, z: v.y },
   }),
   makeInNOutFunctionDesc({
     name: "math/toString/vec3",
