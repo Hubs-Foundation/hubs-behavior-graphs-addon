@@ -1,6 +1,6 @@
 {
   "name": "hubs-behavior-graphs-addon",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Behavior graphs support for Hubs",
   "scripts": {
     "build": "webpack --mode=production",
@@ -32,7 +32,7 @@
     "troika-three-text": "^0.45.0"
   },
   "devDependencies": {
-    "@types/hubs": "github:mozillareality/hubs-ts-types#46634321b81061bba39c31f4f6631b88ad6110bd",
+    "@types/hubs": "github:MozillaReality/hubs-ts-types#main",
     "@types/node": "^18.15.0",
     "@types/react": "^18.2.57",
     "@types/three": "^0.141.0",
